@@ -3,7 +3,6 @@
 
 # In[ ]:
 
-
 import os
 import streamlit as st
 import google.generativeai as genai
@@ -34,7 +33,7 @@ def query_with_cag(context: str, query: str) -> str:
     return response.text.strip()
 
 # Streamlit app interface
-st.title("RAG Application with Google Gemini- by Nirmal Gaud")
+st.title("RAG Application with Google Gemini")
 st.header("Upload a PDF and Ask Your Query")
 
 # Step 1: Ask the user to upload a PDF file
@@ -45,8 +44,13 @@ if 'uploaded_file' not in st.session_state:
 uploaded_file = st.file_uploader("Please upload a PDF file", type="pdf")
 
 if uploaded_file is not None:
+    # Ensure the directory exists
+    temp_dir = "temp"
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)
+
     # Save the uploaded file to a temporary location
-    temp_file_path = os.path.join("temp", uploaded_file.name)
+    temp_file_path = os.path.join(temp_dir, uploaded_file.name)
     
     with open(temp_file_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
@@ -76,4 +80,3 @@ if uploaded_file is not None:
             # Step 6: Get the answer from Gemini LLM with the context of the PDF
             response = query_with_cag(st.session_state.pdf_text, query)
             st.write("Answer:", response)
-
