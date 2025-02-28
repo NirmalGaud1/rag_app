@@ -8,12 +8,9 @@ import streamlit as st
 import google.generativeai as genai
 from PyPDF2 import PdfReader
 
-# Configure Google Gemini API key
 genai.configure(api_key="AIzaSyA-9-lTQTWdNM43YdOXMQwGKDy0SrMwo6c")
 
-# Function to read the PDF file
 def read_pdf(file_path):
-    """Reads the text from a PDF file."""
     with open(file_path, 'rb') as file:
         reader = PdfReader(file)
         text = ""
@@ -22,18 +19,13 @@ def read_pdf(file_path):
             text += page.extract_text()
     return text
 
-# Function to query the Gemini LLM with preloaded context (CAG)
 def query_with_cag(context: str, query: str) -> str:
-    """
-    Query the Gemini LLM with preloaded context using Cache-Augmented Generation.
-    """
     prompt = f"Context:\n{context}\n\nQuery: {query}\nAnswer:"
     model = genai.GenerativeModel("gemini-1.5-flash")
     response = model.generate_content(prompt)
     return response.text.strip()
 
-# Streamlit app interface
-st.title("RAG Application with Google Gemini - by Nirmal Gaud")
+st.title("RAG Application Chatbot")
 st.header("Upload a PDF and Ask Your Query")
 
 # Step 1: Ask the user to upload a PDF file
